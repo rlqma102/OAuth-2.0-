@@ -1,29 +1,34 @@
 <template>
-  <h2>Join</h2>
+
   <div class="joinForm">
-    <div class="join">
+    <div class="join-wrapper">
+      <h2>권한신청</h2>
       <form method="post" action="서버의url" id="join-form">
         <input type="text" name="oaUserName" placeholder="Name" v-model=oaUserName>
         <input type="email" name="oaUserEmail" placeholder="Email" v-model=oaUserEmail>
 
         <div id="app">
           <h5><br><br>신청할 권한을 선택하세요<br><br></h5>
+          <div>
           <label>
-            <input type="radio" name="role" value="USER">일반사용자
+            <input type="radio" id="radioUser" name="role" value="USER">일반사용자
           </label>
+          </div>
+          <div>
           <label>
-            <input type="radio" name="role" value="ADMIN">관리자
+            <input type="radio" id="radioAdmin" name="role" value="ADMIN">관리자
           </label>
+          </div>
+          <div>
           <label>
-            <input type="radio" name="role" value="CAT">고양이
+            <input type="radio" id="radioCat" name="role" value="CAT">고양이
           </label>
-
-          <div>확인용 : <input type="text" v-model="fruit" readonly></div>
-
+        </div>
         </div>
 
         <input type="button" value="신청하기" @click="onRequest"> //버튼클릭시 권한신청 완료
       </form>
+
     </div>
   </div>
 </template>
@@ -42,7 +47,7 @@ const onRequest = ()=> {
   console.log(document.querySelector('input[name="role"]:checked').value);
   axios.post("http://localhost:8080/join", {email: oaUserEmail, role: document.querySelector('input[name="role"]:checked').value}).then((res)=>{
     console.log(res.data.email);
-    if (res.status != 200) {
+    if ( res.status != 200 ) {
       window.location.href = '/login';
     } else {
       alert('['+res.data.role+']권한신청 되었습니다');
@@ -72,7 +77,7 @@ createApp({
 
 *{
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   border: none;
 }
 body{
@@ -82,17 +87,27 @@ body{
 
 .joinForm{
   width: 400px;
-  height: 350px;
+  height: 1000px;
   padding: 40px;
   box-sizing: border-box;
   margin: 0 auto;
+  margin-top: 250px;
 }
 
 .join-wrapper > h2{
+  /*width: 400px;*/
+  /*height: 1000px;*/
+  /*padding: 40px;*/
+  /*box-sizing: border-box;*/
+  /*margin: 0 auto;*/
+}
+
+.join-wrapper >h2 {
   font-size: 24px;
   color: #6A24FE;
   margin-bottom: 20px;
 }
+
 #join-form > input{
   width: 100%;
   height: 48px;
@@ -105,7 +120,8 @@ body{
 #join-form > input::placeholder{
   color: #D2D2D2;
 }
-#join-form > input[type="submit"]{
+
+#join-form > input[type="button"]{
   color: #fff;
   font-size: 16px;
   background-color: #6A24FE;
@@ -131,12 +147,13 @@ body{
   background-size: contain;
 }
 
-.radioButton {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+#radioUser {
+  margin-right: 15px;
+}
+#radioAdmin {
+  margin-right: 15px;
+}
+#radioCat {
+  margin-right: 15px;
 }
 </style>

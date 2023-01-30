@@ -8,10 +8,12 @@ import User from "@/pages/User.vue";
 import Cat from "@/pages/Cat.vue";
 import Waiting from "@/pages/Waiting.vue";
 import { createRouter, createWebHistory } from 'vue-router'
+import Header from "@/components/Header.vue";
 
 
 const routes = [
     {path: '/', component: Home},
+    {path: '/header', component: Header},
     {path: '/login', component: Login},
     {path: '/cat', component: Cat},
     {path: '/user', component: User},

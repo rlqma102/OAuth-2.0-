@@ -1,8 +1,7 @@
 <template>
   <div class="loginForm">
-
     <div class="login-wrapper">
-      <h2>Login</h2>
+      <h2>소셜 회원가입</h2>
       <form method="post" action="서버의url" id="login-form">
         <input type="text" name="userName" placeholder="Email">
         <input type="password" name="userPassword" placeholder="Password">
@@ -50,6 +49,7 @@
           //sessionstorage에 로그인 정보 보관
           sessionStorage.setItem("email", res.data.email)
           sessionStorage.setItem("name", res.data.name)
+          sessionStorage.setItem("name", res.data.role)
           window.alert("로그인하였습니다");
 
           if(res.data.role == 'ADMIN') {
@@ -80,7 +80,7 @@
 <style scoped>
 *{
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   border: none;
 }
 body{
@@ -88,12 +88,13 @@ body{
   font-family: 'Roboto', sans-serif;
 }
 .loginForm{
-
+  height: 800px;
+  margin-top: 250px;
 }
 
 .login-wrapper{
   width: 400px;
-  height: 350px;
+  height: 1000px;
   padding: 40px;
   box-sizing: border-box;
   margin: 0 auto;
@@ -123,10 +124,10 @@ body{
   margin-top: 20px;
 }
 
-.googleButton {
-  color: #6A24FE;
-  border: 1px solid #6A24FE;
-}
+/*.googleButton {*/
+/*  color: #6A24FE;*/
+/*  border: 1px solid #6A24FE;*/
+/*}*/
 
 #login-form > input[type="checkbox"]{
   display: none;
