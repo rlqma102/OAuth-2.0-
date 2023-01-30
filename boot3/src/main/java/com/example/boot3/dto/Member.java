@@ -4,8 +4,10 @@ import com.example.boot3.enums.Role;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 public class Member {
     @Id
@@ -16,6 +18,7 @@ public class Member {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String imageUrl;
@@ -25,11 +28,13 @@ public class Member {
 
     private String auth;
 
+    private String password;
+
     protected Member() {
     }
 
     @Builder
-    public Member(Long id, String oauthId, String name, String email, String imageUrl, Role role, String auth) {
+    public Member(Long id, String oauthId, String name, String email, String imageUrl, Role role, String auth, String password) {
         this.id = id;
         this.oauthId = oauthId;
         this.name = name;
@@ -37,6 +42,7 @@ public class Member {
         this.imageUrl = imageUrl;
         this.role = role;
         this.auth = auth;
+        this.password = password;
     }
 
     public Member update(String name, String email, String imageUrl) {

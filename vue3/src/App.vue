@@ -8,10 +8,10 @@
 
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import store from "@/scripts/store";
-import axios from "axios";
-import {useRoute} from "vue-router";
-import {watch} from "vue";
+// import store from "@/scripts/store";
+// import axios from "axios";
+// import {useRoute} from "vue-router";
+// import {watch} from "vue";
 
 export default {
   name: 'App',
@@ -21,23 +21,23 @@ export default {
 
   },
   setup() {
-    const check = ()=> {
-      axios.get("/api/account/check").then(({data})=> {
-        console.log(data);
+    // const check = ()=> {
+    //   axios.get("/api/account/check").then(({data})=> {
+    //     console.log(data);
+    //
+    //     if(data) {
+    //       store.commit("setAccount", data);
+    //     } else {
+    //       store.commit("setAccount", 0);
+    //     }
+    //   })
+    // }
 
-        if(data) {
-          store.commit("setAccount", data);
-        } else {
-          store.commit("setAccount", 0);
-        }
-      })
-    }
+    //const route = useRoute();
 
-    const route = useRoute();
-
-    watch(route, () => {
-      check();
-    })
+    // watch(route, () => {
+    //   check();
+    // })
   }
 }
 </script>

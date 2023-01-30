@@ -1,9 +1,12 @@
 package com.example.boot3.enums;
 
+
 public enum Role {
 
     GUEST("ROLE_GUEST"),
-    USER("ROLE_USER");
+    USER("ROLE_USER"),
+    ADMIN("ADMIN"),
+    CAT("CAT");
 
     private final String key;
 

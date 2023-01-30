@@ -1,70 +1,75 @@
 <template>
+  <h2>Join</h2>
   <div class="joinForm">
     <div class="join">
-      <h2>Join</h2>
       <form method="post" action="서버의url" id="join-form">
-        <input type="text" name="userName" placeholder="Name">
-        <input type="text" name="userEmail" placeholder="Email">
-        <input type="password" name="userPw" placeholder="Password">
-        <input type="password" name="userPwCh" placeholder="Password check">
-        <label for="remember-check">
-          <input type="checkbox" id="remember-check">아이디 저장하기
-        </label>
-        <input type="submit" value="Join">
+        <input type="text" name="oaUserName" placeholder="Name" v-model=oaUserName>
+        <input type="email" name="oaUserEmail" placeholder="Email" v-model=oaUserEmail>
+
+        <div id="app">
+          <h5><br><br>신청할 권한을 선택하세요<br><br></h5>
+          <label>
+            <input type="radio" name="role" value="USER">일반사용자
+          </label>
+          <label>
+            <input type="radio" name="role" value="ADMIN">관리자
+          </label>
+          <label>
+            <input type="radio" name="role" value="CAT">고양이
+          </label>
+
+          <div>확인용 : <input type="text" v-model="fruit" readonly></div>
+
+        </div>
+
+        <input type="button" value="신청하기" @click="onRequest"> //버튼클릭시 권한신청 완료
       </form>
     </div>
-
-
-
   </div>
-
 </template>
 
-<script>
-import {reactive} from "vue";
+
+<script setup>
+import {router} from "@/scripts/router";
 import axios from "axios";
-import store from "@/scripts/store";
-import router from "@/scripts/router";
+import { createApp } from 'vue';
+//import Vue from 'vue';
 
-export default {
-  setup() {
-    // 로그인 페이지 고려해야하는 것
-    // 1. 이미 로그인한 사용자 일 경우 home 으로 보낸다
-    // 2. 이미 로그인한 사용자 일 경우 기존 로그인 정보를 삭제하고 다시 로그인하게 한다
-    // let accessToken = localStorage.getItem('accessToken'); // 데이터 조회
-    // if ( accessToken != undefined && accessToken != null && accessToken != '' ) {
-    //   alert("이미 로그인한 사용자 입니다");
-    // }
+let oaUserName = sessionStorage.getItem('name')
+let oaUserEmail = sessionStorage.getItem('email')
 
-    const state = reactive({
-      form :{
-        email: "",
-        password: ""
-      }
-    })
-    const submit = ()=> {
-      axios.post("/api/account/login", state.form).then((res)=> {
-        store.commit('setAccount', res.data)
-        console.log(res.data);
-        //sessionstorage에 로그인 정보 보관
-        sessionStorage.setItem("id", res.data)
-        router.push({path:"/"})
-        window.alert("로그인하였습니다");
-      }).catch(()=> {
-        window.alert("로그인 정보가 존재하지 않습니다.");
-      })
+const onRequest = ()=> {
+  console.log(document.querySelector('input[name="role"]:checked').value);
+  axios.post("http://localhost:8080/join", {email: oaUserEmail, role: document.querySelector('input[name="role"]:checked').value}).then((res)=>{
+    console.log(res.data.email);
+    if (res.status != 200) {
+      window.location.href = '/login';
+    } else {
+      alert('['+res.data.role+']권한신청 되었습니다');
+      // 로컬 스토리지에 저장
+      localStorage.setItem('accessToken', res.data.accessToken);
+      //신청 버튼 클릭시 화면전환 되어야함(아직 안됨)
+      router.push({path:"/waiting"})
     }
-    return {state, submit}
-  },
-  methods: {
-    googleLogin() {
-      window.location = 'https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&client_id=130018349769-enrk74a1tvt8rhaoockie6gv2gd8ntm0.apps.googleusercontent.com&response_type=code&redirect_uri=http://localhost:3000/redirect/oauth&access_type=offline';
-    }
-  }
+  });
 }
+
+
+
+createApp({
+  data() {
+   return {
+     agree:false,
+     fruit: "",
+   }
+  }
+})
+
+
 </script>
 
 <style scoped>
+
 *{
   padding: 0;
   margin: 0;
@@ -122,8 +127,16 @@ body{
   background-size: contain;
 }
 #join-form input[type="checkbox"]:checked + label{
-  /*background-image: url("checkbox-active.png");*/
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.radioButton {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>

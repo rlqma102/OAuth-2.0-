@@ -10,6 +10,15 @@
                 <router-link to="/"  class="text-white">메인 화면</router-link>
               </li>
               <li>
+                <router-link to="/user"  class="text-white">일반 회원</router-link>
+              </li>
+              <li>
+                <router-link to="/cat"  class="text-white">고양이</router-link>
+              </li>
+              <li>
+                <router-link to="/admin"  class="text-white">관리자</router-link>
+              </li>
+              <li>
                 <router-link to="/login"  class="text-white" v-if="$store.state.account.id">로그인</router-link>
                 <a to="/login"  class="text-white" @click="logout()" v-else>로그아웃</a>
               </li>

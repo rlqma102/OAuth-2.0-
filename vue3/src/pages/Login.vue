@@ -24,16 +24,17 @@
   import {reactive} from "vue";
   import axios from "axios";
   import store from "@/scripts/store";
-  import router from "@/scripts/router";
+  import {router} from "@/scripts/router";
 
   export default {
     setup() {
       // 로그인 페이지 고려해야하는 것
       // 1. 이미 로그인한 사용자 일 경우 home 으로 보낸다
       // 2. 이미 로그인한 사용자 일 경우 기존 로그인 정보를 삭제하고 다시 로그인하게 한다
-      let accessToken = localStorage.getItem('accessToken'); // 데이터 조회
+      let accessToken = sessionStorage.getItem('accessToken'); // 데이터 조회
       if ( accessToken != undefined && accessToken != null && accessToken != '' ) {
         alert("이미 로그인한 사용자 입니다");
+        console.log(router)
       }
 
       const state = reactive({
@@ -47,9 +48,21 @@
           store.commit('setAccount', res.data)
           console.log(res.data);
           //sessionstorage에 로그인 정보 보관
-          sessionStorage.setItem("id", res.data)
-          router.push({path:"/"})
+          sessionStorage.setItem("email", res.data.email)
+          sessionStorage.setItem("name", res.data.name)
           window.alert("로그인하였습니다");
+
+          if(res.data.role == 'ADMIN') {
+            window.location.href = '/admin';
+          }
+          if(res.data.role == 'USER') {
+            window.location.href = '/user';
+          }
+          if(res.data.role == 'GUEST') {
+            router.push({path:"/join"})
+          }
+
+
         }).catch(()=> {
           window.alert("로그인 정보가 존재하지 않습니다.");
         })
