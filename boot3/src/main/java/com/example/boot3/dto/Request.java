@@ -24,7 +24,6 @@ public class Request {
     @CreatedDate
     private LocalDateTime createDate;
 
-    @CreatedDate
     private LocalDateTime okDate;
 
     private char rqStatus; //권한상태 : Y-승인, N-반려, P-진행

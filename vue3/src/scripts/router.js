@@ -1,6 +1,6 @@
 import Home from "@/pages/Home.vue";
-import Login from "@/pages/Login.vue";
-import Join from "@/pages/Join.vue";
+import GoogleJoin from "@/pages/GoogleJoin.vue";
+import Request from "@/pages/Request.vue";
 import OAuthLogin from "@/pages/OAuthLogin.vue";
 import NotFound from "@/pages/NotFound.vue";
 import Admin from "@/pages/Admin.vue";
@@ -9,16 +9,20 @@ import Cat from "@/pages/Cat.vue";
 import Waiting from "@/pages/Waiting.vue";
 import { createRouter, createWebHistory } from 'vue-router'
 import Header from "@/components/Header.vue";
+import RequestList from "@/components/RequestList.vue";
+import List from "@/pages/List.vue";
 
 
 const routes = [
     {path: '/', component: Home},
     {path: '/header', component: Header},
-    {path: '/login', component: Login},
+    {path: '/requestList', component: RequestList},
+    {path: '/googleJoin', component: GoogleJoin},
     {path: '/cat', component: Cat},
     {path: '/user', component: User},
     {path: '/admin', component: Admin},
-    {path: '/join', component: Join},
+    {path: '/request', component: Request},
+    {path: '/list', component: List},
     {path: '/redirect/oauth', component: OAuthLogin},
     {path: "/404", name: "notFound",component: NotFound},
     {path: "/waiting", component: Waiting},

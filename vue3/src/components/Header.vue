@@ -10,7 +10,7 @@
                 <router-link to="/"  class="text-white">메인 화면</router-link>
               </li>
               <li>
-                <router-link to="/join"  class="text-white">권한 신청</router-link>
+                <router-link to="/request"  class="text-white">권한 신청</router-link>
               </li>
               <li>
                 <router-link to="/user"  class="text-white">일반 회원</router-link>
@@ -22,7 +22,7 @@
                 <router-link to="/admin"  class="text-white">관리자</router-link>
               </li>
               <li>
-                <router-link to="/login"  class="text-white">로그인</router-link>
+                <router-link to="/googleJoin"  class="text-white">google</router-link>
               </li>
               <li>
                 <router-link to="/login"  class="text-white" v-if="$store.state.account.id">로그인</router-link>
@@ -59,6 +59,8 @@ export default {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('name');
       alert("로그아웃 되었습니다.")
+
+      window.location.href='/googlejoin';
     }
      return {logout};
   }

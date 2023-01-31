@@ -1,22 +1,18 @@
 <template>
-  <div class="loginForm">
-    <div class="login-wrapper">
+  <div class="googleJoinForm">
+    <div class="googleJoin-wrapper">
       <h2>소셜 회원가입</h2>
-      <form method="post" action="서버의url" id="login-form">
+      <form method="post" action="서버의url" id="googleJoin-form">
         <input type="text" name="userName" placeholder="Email">
         <input type="password" name="userPassword" placeholder="Password">
         <label for="remember-check">
           <input type="checkbox" id="remember-check">아이디 저장하기
         </label>
         <input type="submit" value="Login">
-        <input class="googleButton" type="button" @click="googleLogin" value="GOOGLE LOGIN">
+        <input class="googleButton" type="button" @click="googleLogin" value="GOOGLE JOIN">
       </form>
     </div>
-
-
-
   </div>
-
 </template>
 
 <script>
@@ -49,7 +45,7 @@
           //sessionstorage에 로그인 정보 보관
           sessionStorage.setItem("email", res.data.email)
           sessionStorage.setItem("name", res.data.name)
-          sessionStorage.setItem("name", res.data.role)
+          sessionStorage.setItem("role", res.data.role)
           window.alert("로그인하였습니다");
 
           if(res.data.role == 'ADMIN') {
@@ -61,8 +57,6 @@
           if(res.data.role == 'GUEST') {
             router.push({path:"/join"})
           }
-
-
         }).catch(()=> {
           window.alert("로그인 정보가 존재하지 않습니다.");
         })
@@ -87,12 +81,12 @@ body{
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
 }
-.loginForm{
+.googleJoinForm{
   height: 800px;
   margin-top: 250px;
 }
 
-.login-wrapper{
+.googleJoin-wrapper{
   width: 400px;
   height: 1000px;
   padding: 40px;
@@ -100,12 +94,12 @@ body{
   margin: 0 auto;
 }
 
-.login-wrapper > h2{
+.googleJoin-wrapper > h2{
   font-size: 24px;
   color: #6A24FE;
   margin-bottom: 20px;
 }
-#login-form > input{
+#googleJoin-form > input{
   width: 100%;
   height: 48px;
   padding: 0 10px;
@@ -114,35 +108,30 @@ body{
   border-radius: 6px;
   background-color: #F8F8F8;
 }
-#login-form > input::placeholder{
+#googleJoin-form > input::placeholder{
   color: #D2D2D2;
 }
-#login-form > input[type="submit"]{
+#googleJoin-form > input[type="submit"]{
   color: #fff;
   font-size: 16px;
   background-color: #6A24FE;
   margin-top: 20px;
 }
 
-/*.googleButton {*/
-/*  color: #6A24FE;*/
-/*  border: 1px solid #6A24FE;*/
-/*}*/
-
-#login-form > input[type="checkbox"]{
+#googleJoin-form > input[type="checkbox"]{
   display: none;
 }
-#login-form > label{
+#googleJoin-form > label{
   color: #999999;
 }
-#login-form input[type="checkbox"] + label{
+#googleJoin-form input[type="checkbox"] + label{
   cursor: pointer;
   padding-left: 26px;
   /*background-image: url("checkbox.png");*/
   background-repeat: no-repeat;
   background-size: contain;
 }
-#login-form input[type="checkbox"]:checked + label{
+#googleJoin-form input[type="checkbox"]:checked + label{
   /*background-image: url("checkbox-active.png");*/
   background-repeat: no-repeat;
   background-size: contain;

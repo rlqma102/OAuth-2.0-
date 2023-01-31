@@ -8,7 +8,7 @@
   export default {
     setup() {
       if ( code == null || code == undefined || code == '' ) {
-        window.location.href = '/login';
+        window.location.href = '/googlejoin';
       }
 
       axios.get('http://localhost:8080/redirect/oauth/google?code='+code).then((res)=>{
@@ -21,7 +21,8 @@
           sessionStorage.setItem('accessToken', res.data.accessToken);
           sessionStorage.setItem('name', res.data.name);
           sessionStorage.setItem('email', res.data.email);
-          //window.location.href = '/join';// 로컬 스토리지에 저장
+          sessionStorage.setItem('role', res.data.role);
+
           if(res.data.role == 'ADMIN') {
             window.location.href = '/admin';
           }
@@ -29,7 +30,7 @@
             window.location.href = '/user';
           }
           if(res.data.role == 'GUEST') {
-            window.location.href = '/join';
+            window.location.href = '/request';
           }
           //router.push({path:"/join"})
           // localStorage.getItem('accessToken'); // 데이터 조회

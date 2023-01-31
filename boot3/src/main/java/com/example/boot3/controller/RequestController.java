@@ -1,16 +1,20 @@
 package com.example.boot3.controller;
 
 import com.example.boot3.dto.Request;
+import com.example.boot3.repository.RequestRepository;
 import com.example.boot3.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class RequestController {
 
     private final RequestService requestService;
-    @PostMapping ("/join")
+
+    @PostMapping ("/request")
     public void roleRequest(@RequestBody Request request) {
 
         System.out.println(request.getEmail());

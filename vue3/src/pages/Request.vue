@@ -1,11 +1,13 @@
 <template>
 
-  <div class="joinForm">
-    <div class="join-wrapper">
+  <div class="requestForm">
+    <div class="request-wrapper">
       <h2>권한신청</h2>
-      <form method="post" action="서버의url" id="join-form">
+      <form method="post" action="서버의url" id="request-form">
         <input type="text" name="oaUserName" placeholder="Name" v-model=oaUserName>
         <input type="email" name="oaUserEmail" placeholder="Email" v-model=oaUserEmail>
+        <input type="email" name="oaUserRole" placeholder="Role" v-model=oaUserRole>
+        {{}}
 
         <div id="app">
           <h5><br><br>신청할 권한을 선택하세요<br><br></h5>
@@ -35,26 +37,33 @@
 
 
 <script setup>
-import {router} from "@/scripts/router";
+
+//import {onMounted, reactive} from "vue";
 import axios from "axios";
+//import {useStore} from "vuex";
 import { createApp } from 'vue';
-//import Vue from 'vue';
 
 let oaUserName = sessionStorage.getItem('name')
 let oaUserEmail = sessionStorage.getItem('email')
+let oaUserRole = sessionStorage.getItem('role')
 
 const onRequest = ()=> {
   console.log(document.querySelector('input[name="role"]:checked').value);
-  axios.post("http://localhost:8080/join", {email: oaUserEmail, role: document.querySelector('input[name="role"]:checked').value}).then((res)=>{
-    console.log(res.data.email);
+  axios.post("http://localhost:8080/request", {email: oaUserEmail, role: document.querySelector('input[name="role"]:checked').value}).then((res)=>{
+
+    console.log(res)
+
     if ( res.status != 200 ) {
-      window.location.href = '/login';
+      window.location.href = '/googlejoin';
     } else {
-      alert('['+res.data.role+']권한신청 되었습니다');
-      // 로컬 스토리지에 저장
-      localStorage.setItem('accessToken', res.data.accessToken);
-      //신청 버튼 클릭시 화면전환 되어야함(아직 안됨)
-      router.push({path:"/waiting"})
+      alert('권한신청 되었습니다');
+      // 세션 스토리지에 저장
+      sessionStorage.setItem('accessToken', res.data.accessToken);
+      sessionStorage.setItem('role', res.data.role);
+      sessionStorage.setItem('createDate', res.data.createDate);
+      localStorage.setItem('rqStatus', res.data.rqStatus);
+
+      window.location.href='/admin';
     }
   });
 }
@@ -85,7 +94,7 @@ body{
   font-family: 'Roboto', sans-serif;
 }
 
-.joinForm{
+.requestForm{
   width: 400px;
   height: 1000px;
   padding: 40px;
@@ -94,7 +103,7 @@ body{
   margin-top: 250px;
 }
 
-.join-wrapper > h2{
+.request-wrapper > h2{
   /*width: 400px;*/
   /*height: 1000px;*/
   /*padding: 40px;*/
@@ -102,13 +111,13 @@ body{
   /*margin: 0 auto;*/
 }
 
-.join-wrapper >h2 {
+.request-wrapper >h2 {
   font-size: 24px;
   color: #6A24FE;
   margin-bottom: 20px;
 }
 
-#join-form > input{
+#request-form > input{
   width: 100%;
   height: 48px;
   padding: 0 10px;
@@ -117,11 +126,11 @@ body{
   border-radius: 6px;
   background-color: #F8F8F8;
 }
-#join-form > input::placeholder{
+#request-form > input::placeholder{
   color: #D2D2D2;
 }
 
-#join-form > input[type="button"]{
+#request-form > input[type="button"]{
   color: #fff;
   font-size: 16px;
   background-color: #6A24FE;
@@ -129,20 +138,20 @@ body{
 }
 
 
-#join-form > input[type="checkbox"]{
+#request-form > input[type="checkbox"]{
   display: none;
 }
-#join-form > label{
+#request-form > label{
   color: #999999;
 }
-#join-form input[type="checkbox"] + label{
+#request-form input[type="checkbox"] + label{
   cursor: pointer;
   padding-left: 26px;
   /*background-image: url("checkbox.png");*/
   background-repeat: no-repeat;
   background-size: contain;
 }
-#join-form input[type="checkbox"]:checked + label{
+#request-form input[type="checkbox"]:checked + label{
   background-repeat: no-repeat;
   background-size: contain;
 }
