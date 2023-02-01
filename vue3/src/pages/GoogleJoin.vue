@@ -2,13 +2,8 @@
   <div class="googleJoinForm">
     <div class="googleJoin-wrapper">
       <h2>소셜 회원가입</h2>
-      <form method="post" action="서버의url" id="googleJoin-form">
-        <input type="text" name="userName" placeholder="Email">
-        <input type="password" name="userPassword" placeholder="Password">
-        <label for="remember-check">
-          <input type="checkbox" id="remember-check">아이디 저장하기
-        </label>
-        <input type="submit" value="Login">
+      <form method="post" action="" id="googleJoin-form">
+
         <input class="googleButton" type="button" @click="googleLogin" value="GOOGLE JOIN">
       </form>
     </div>
@@ -28,7 +23,7 @@
       // 2. 이미 로그인한 사용자 일 경우 기존 로그인 정보를 삭제하고 다시 로그인하게 한다
       let accessToken = sessionStorage.getItem('accessToken'); // 데이터 조회
       if ( accessToken != undefined && accessToken != null && accessToken != '' ) {
-        alert("이미 로그인한 사용자 입니다");
+        alert("이미 로그인한 사용자 입니다. 기존 회원정보로 로그인 됩니다. ");
         console.log(router)
       }
 
@@ -46,9 +41,9 @@
           sessionStorage.setItem("email", res.data.email)
           sessionStorage.setItem("name", res.data.name)
           sessionStorage.setItem("role", res.data.role)
-          window.alert("로그인하였습니다");
 
           if(res.data.role == 'ADMIN') {
+            window.alert("ADMIN 으로 로그인 하였습니다.")
             window.location.href = '/admin';
           }
           if(res.data.role == 'USER') {
@@ -56,6 +51,10 @@
           }
           if(res.data.role == 'GUEST') {
             router.push({path:"/join"})
+          }
+          if(res.data.role == 'CAT') {
+            window.alert("CAT 으로 로그인 하였습니다. CAT 페이지로 이동합니다.")
+            router.push({path:"/cat"})
           }
         }).catch(()=> {
           window.alert("로그인 정보가 존재하지 않습니다.");
@@ -111,7 +110,7 @@ body{
 #googleJoin-form > input::placeholder{
   color: #D2D2D2;
 }
-#googleJoin-form > input[type="submit"]{
+#googleJoin-form > input[type="button"]{
   color: #fff;
   font-size: 16px;
   background-color: #6A24FE;

@@ -1,26 +1,34 @@
 package com.example.boot3.dto;
 
 import com.example.boot3.enums.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
+@Data
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Request {
 
-
-    //권한신청시 여기로 들어온다
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long member_id;
+
     private String email;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Role rq_role;
+
     @CreatedDate
     private LocalDateTime createDate;
 
@@ -28,19 +36,6 @@ public class Request {
 
     private char rqStatus; //권한상태 : Y-승인, N-반려, P-진행
 
-//    public Request() {
-//
-//    }
-//
-//    @Builder
-//    public Request(String email, Role role, LocalDateTime createDate,LocalDateTime okDate, char rqStatus) {
-//
-//        this.email = email;
-//        this.role = role;
-//        this.createDate = createDate;
-//        this.okDate = okDate;
-//        this.rqStatus = rqStatus;
-//    }
 }
 
 

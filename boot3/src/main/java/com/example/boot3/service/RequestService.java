@@ -19,15 +19,16 @@ public class RequestService {
     public void requestRole(Request request) {
 
         Member member = memberRepository.findByEmail(request.getEmail());
-
-            Request requestRole = Request.builder()
-                    .email(request.getEmail())
-                    .role(request.getRole())
-                    .createDate(LocalDateTime.now())
-                    .okDate(null)
-                    .rqStatus('P')
-                            .build();
-            requestRepository.save(requestRole);
+        Request requestRole = Request.builder()
+            .member_id(request.getMember_id())
+            .email(request.getEmail())
+            .role(member.getRole())
+            .rq_role(request.getRq_role())
+            .createDate(LocalDateTime.now())
+            .okDate(null)
+            .rqStatus('P')
+            .build();
+        requestRepository.save(requestRole);
 
     }
 }

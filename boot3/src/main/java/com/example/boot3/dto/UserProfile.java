@@ -4,6 +4,11 @@ import com.example.boot3.enums.Role;
 import lombok.Builder;
 import lombok.Getter;
 
+
+/**
+ * oauth server에서 들어올 유저의 정보를 받아줄 DTO
+ * */
+
 @Getter
 public class UserProfile {
 

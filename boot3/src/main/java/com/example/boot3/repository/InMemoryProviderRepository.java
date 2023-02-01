@@ -5,6 +5,10 @@ import com.example.boot3.provider.OauthProvider;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * oauth server를 여러개 사용할 때 필요하다. 각각의 oauth server를 분해해서 저장하는 공간.
+ * */
 public class InMemoryProviderRepository {
 
     private final Map<String, OauthProvider> providers;

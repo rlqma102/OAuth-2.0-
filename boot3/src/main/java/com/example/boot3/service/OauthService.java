@@ -35,29 +35,20 @@ public class OauthService {
     }
 
     public LoginResponse login(String providerName, String code) {
-        // 프론트에서 넘어온 provider 이름을 통해 InMemoryProviderRepository에서 OauthProvider 가져오기
+        // InMemoryProviderRepository에서 OauthProvider 가져오기
         OauthProvider provider = inMemoryProviderRepository.findByProviderName(providerName);
 
-        System.out.println("code");
-        System.out.println(code);
-        System.out.println("code");
         // access token 가져오기
         OauthTokenResponse tokenResponse = getToken(code, provider);
-        System.out.println("tokenResponse");
-        System.out.println(tokenResponse.toString());
-        System.out.println("tokenResponse");
 
-        // 유저 정보 가져오기
+        // 실제 유저 정보 가져오기
         UserProfile userProfile = getUserProfile(providerName, tokenResponse, provider);
 
-        // 유저 DB에 저장
+        // 받아온 유저 정보를 DB에 저장
         Member member = saveOrUpdate(userProfile);
 
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()));
         String refreshToken = jwtTokenProvider.createRefreshToken();
-
-        // TODO 레디스에 refresh token 추가
-        // redisUtil.setData(String.valueOf(member.getId()), refreshToken);
 
         return LoginResponse.builder()
                 .id(member.getId())
@@ -74,49 +65,36 @@ public class OauthService {
 
     private Member saveOrUpdate(UserProfile userProfile) {
         Member member = memberRepository.findByOauthId(userProfile.getOauthId())
-                .map(entity -> entity.update(userProfile.getName(), userProfile.getEmail(), userProfile.getImageUrl()))
-                .orElseGet(userProfile::toMember);
+             .map(entity -> entity.update(userProfile.getName(), userProfile.getEmail(), userProfile.getImageUrl()))
+             .orElseGet(userProfile::toMember);
         return memberRepository.save(member);
     }
 
+
+    /**
+     * accessToken 받아오기
+     * */
     private OauthTokenResponse getToken(String code, OauthProvider provider) {
         Map result = WebClient.create()
-                .post()
-                .uri(provider.getTokenUrl())
-                .headers(header -> {
-                    header.setBasicAuth(provider.getClientId(), provider.getClientSecret());
-                    header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-                    header.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                    header.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
+           .post()
+           .uri(provider.getTokenUrl())
+           .headers(header -> {
+              header.setBasicAuth(provider.getClientId(), provider.getClientSecret());
+              header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+              header.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+              header.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
                 })
                 .bodyValue(tokenRequest(code, provider))
                 .retrieve()
                 .bodyToMono(Map.class)
                 .block();
-        System.out.println("result");
-        System.out.println(result.toString());
-        System.out.println("result");
 
-        return new OauthTokenResponse(result.get("access_token").toString(), result.get("scope").toString(), result.get("token_type").toString());
-//        return WebClient.create()
-//                .post()
-//                .uri(provider.getTokenUrl())
-//                .headers(header -> {
-//                    header.setBasicAuth(provider.getClientId(), provider.getClientSecret());
-//                    header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//                    header.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-//                    header.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
-//                })
-//                .bodyValue(tokenRequest(code, provider))
-//                .retrieve()
-//                .bodyToMono(OauthTokenResponse.class)
-//                .block();
+        return new OauthTokenResponse(result.get("access_token").toString()
+                , result.get("scope").toString()
+                , result.get("token_type").toString());
     }
 
     private MultiValueMap<String, String> tokenRequest(String code, OauthProvider provider) {
-        System.out.println("provider.getRedirectUrl()");
-        System.out.println(provider.getRedirectUrl());
-        System.out.println("provider.getRedirectUrl()");
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("code", code);
@@ -125,18 +103,19 @@ public class OauthService {
         return formData;
     }
 
+    /**
+     * 유저 정보를 map형식으로 유저프로필 만들기
+     * */
     private UserProfile getUserProfile(String providerName, OauthTokenResponse tokenResponse, OauthProvider provider) {
         Map<String, Object> userAttributes = getUserAttributes(provider, tokenResponse);
         return OauthAttributes.extract(providerName, userAttributes);
     }
 
-    // OAuth 서버에서 유저 정보 map으로 가져오기
+    /**
+     * OAuth 서버에서 유저 정보 map으로 가져오기
+     * */
     private Map<String, Object> getUserAttributes(OauthProvider provider, OauthTokenResponse tokenResponse) {
-        System.out.println("provider.getUserInfoUrl()");
-        System.out.println(provider.getUserInfoUrl());
-        System.out.println("tokenResponse.getAccessToken()");
-        System.out.println(tokenResponse.getAccessToken());
-        System.out.println("tokenResponse.getAccessToken()");
+
         return WebClient.create()
                 .get()
                 .uri(provider.getUserInfoUrl())

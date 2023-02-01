@@ -15,6 +15,8 @@
     </div>
 
   </div>
+
+  <h1>HOME 입니다</h1>
 </template>
 
 <script>
@@ -28,7 +30,7 @@ export default {
   setup() {
     var accessToken = localStorage.getItem('accessToken'); // 데이터 조회
     if ( accessToken == undefined || accessToken == null || accessToken == '' ) {
-      window.location.href = '/login';
+      window.location.href = '/home';
     }
 
     const state = reactive({

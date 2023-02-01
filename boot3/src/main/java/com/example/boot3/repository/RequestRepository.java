@@ -3,6 +3,11 @@ package com.example.boot3.repository;
 import com.example.boot3.dto.Request;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RequestRepository extends JpaRepository<Request, String> {
+import java.util.Optional;
+
+public interface RequestRepository extends JpaRepository<Request, Long> {
+
+    Optional<Request> findById(Long id);
+
     Request findByEmail(String email);
 }

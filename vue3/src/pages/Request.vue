@@ -3,7 +3,7 @@
   <div class="requestForm">
     <div class="request-wrapper">
       <h2>권한신청</h2>
-      <form method="post" action="서버의url" id="request-form">
+      <form method="post" action="" id="request-form">
         <input type="text" name="oaUserName" placeholder="Name" v-model=oaUserName>
         <input type="email" name="oaUserEmail" placeholder="Email" v-model=oaUserEmail>
         <input type="email" name="oaUserRole" placeholder="Role" v-model=oaUserRole>
@@ -43,29 +43,31 @@ import axios from "axios";
 //import {useStore} from "vuex";
 import { createApp } from 'vue';
 
-let oaUserName = sessionStorage.getItem('name')
+let oaUserName  = sessionStorage.getItem('name')
 let oaUserEmail = sessionStorage.getItem('email')
-let oaUserRole = sessionStorage.getItem('role')
+let oaUserRole  = sessionStorage.getItem('role')
 
 const onRequest = ()=> {
-  console.log(document.querySelector('input[name="role"]:checked').value);
-  axios.post("http://localhost:8080/request", {email: oaUserEmail, role: document.querySelector('input[name="role"]:checked').value}).then((res)=>{
+  sessionStorage.getItem('accessToken');
+  axios.post("http://localhost:8080/request"
+            ,{email:oaUserEmail
+                   ,role:sessionStorage.getItem('role') // 현재 권한
+                   ,rq_role:document.querySelector('input[name="role"]:checked').value} // 신청 권한
+            ,{headers : {authorization: sessionStorage.getItem('accessToken')}})
+       .then((res)=>{
+           console.log(res);
+           if ( res.status != 200 ) {
+             window.location.href = '/googlejoin';
+           } else {
+             alert('권한신청 되었습니다');
+             // 세션 스토리지에 저장
+             sessionStorage.setItem('role', res.data.role);
+             sessionStorage.setItem('createDate', res.data.createDate);
+             localStorage.setItem('rqStatus', res.data.rqStatus);
 
-    console.log(res)
-
-    if ( res.status != 200 ) {
-      window.location.href = '/googlejoin';
-    } else {
-      alert('권한신청 되었습니다');
-      // 세션 스토리지에 저장
-      sessionStorage.setItem('accessToken', res.data.accessToken);
-      sessionStorage.setItem('role', res.data.role);
-      sessionStorage.setItem('createDate', res.data.createDate);
-      localStorage.setItem('rqStatus', res.data.rqStatus);
-
-      window.location.href='/admin';
-    }
-  });
+             window.location.href='/waiting';
+           }
+       });
 }
 
 

@@ -15,26 +15,18 @@
         console.log("res=================="+res);
         console.log(router)
         if ( res.status != 200 ) {
-          window.location.href = '/login';
+          window.location.href = '/googlejoin';
         } else {
           alert('['+res.data.role+']로그인 되었습니다');
+
+          window.location.href = '/request';
+
           sessionStorage.setItem('accessToken', res.data.accessToken);
           sessionStorage.setItem('name', res.data.name);
           sessionStorage.setItem('email', res.data.email);
           sessionStorage.setItem('role', res.data.role);
 
-          if(res.data.role == 'ADMIN') {
-            window.location.href = '/admin';
-          }
-          if(res.data.role == 'USER') {
-            window.location.href = '/user';
-          }
-          if(res.data.role == 'GUEST') {
-            window.location.href = '/request';
-          }
-          //router.push({path:"/join"})
-          // localStorage.getItem('accessToken'); // 데이터 조회
-          // window.location.href = '/';
+
         }
       });
     }

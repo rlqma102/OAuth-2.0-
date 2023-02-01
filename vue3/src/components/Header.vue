@@ -7,7 +7,7 @@
             <h4 class="text-white">사이트맵</h4>
             <ul class="list-unstyled">
               <li>
-                <router-link to="/"  class="text-white">메인 화면</router-link>
+                <router-link to="/home"  class="text-white">메인 화면</router-link>
               </li>
               <li>
                 <router-link to="/request"  class="text-white">권한 신청</router-link>

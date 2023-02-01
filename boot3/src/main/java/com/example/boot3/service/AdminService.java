@@ -2,13 +2,14 @@ package com.example.boot3.service;
 
 import com.example.boot3.dto.Member;
 import com.example.boot3.dto.Request;
-import com.example.boot3.enums.Role;
 import com.example.boot3.repository.MemberRepository;
 import com.example.boot3.repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,34 +18,46 @@ public class AdminService {
     private final MemberRepository memberRepository;
     private final RequestRepository requestRepository;
 
-    public String ApproveRoles(Member member) {
+    public List getRequests() {
+        return requestRepository.findAll();
+    }
+    public String accept(Request prm) {
+        String result = "";
 
-        Request request = requestRepository.findByEmail(member.getEmail());
+        Optional<Request> request = requestRepository.findById(prm.getId()); // 요청한 정보
+        if ( request.isPresent() ) {
+            Request req = request.get();
+            req.setRqStatus('Y');
+            req.setOkDate(LocalDateTime.now());
+            requestRepository.save(req);
 
-        request.setRqStatus('Y');
-        request.setOkDate(LocalDateTime.now());
+            Member member = memberRepository.findByEmail(req.getEmail()); // 사용자
+            Member updateMember = memberRepository.findByEmail(member.getEmail());
+            updateMember.setRole(req.getRq_role());
+            memberRepository.save(updateMember);
 
-        String role = "";
-
-        if (Role.GUEST.equals(request.getRole())) {
-            role = "GUEST";
-        } else if(Role.USER.equals(request.getRole())) {
-            role = "USER";
-        } else if(Role.ADMIN.equals(request.getRole())) {
-            role = "ADMIN";
-        } else {
-            role = "CAT";
+            result = req.getRq_role().getKey();
         }
 
-        requestRepository.save(request);
+        return result;
+    }
 
-        Member updateMember = memberRepository.findByEmail(member.getEmail());
 
-        updateMember.setRole(request.getRole());
+    //권한 요청 반려하기
+    public String cancleRoles(Request prm) {
+        String result = "";
 
-        memberRepository.save(updateMember);
+        Optional<Request> request = requestRepository.findById(prm.getId()); // 요청한 정보
+        if ( request.isPresent() ) {
+            Request req = request.get();
+            req.setRqStatus('N');
+            req.setOkDate(LocalDateTime.now());
+            requestRepository.save(req);
 
-        return role;
+            result = req.getRq_role().getKey();
+        }
+
+        return result;
     }
 
 }

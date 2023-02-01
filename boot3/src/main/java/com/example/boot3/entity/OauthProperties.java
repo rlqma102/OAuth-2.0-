@@ -7,6 +7,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ oauth의 user와 provider 하위에 존재하는 값을 바인딩 받을 수 있는 필드 생성
+ **/
 @Getter
 @ConfigurationProperties(prefix = "oauth2")
 public class OauthProperties {

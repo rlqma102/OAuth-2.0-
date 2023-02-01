@@ -3,11 +3,11 @@ package com.example.boot3.dto;
 import com.example.boot3.enums.Role;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
+@Data
 @Getter
-@Setter
 @Entity
 public class Member {
     @Id
@@ -18,6 +18,7 @@ public class Member {
 
     private String name;
 
+    @JoinColumn(name="email")
     @Column(unique = true)
     private String email;
 

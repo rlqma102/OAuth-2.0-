@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OauthTokenResponse {
 
+
+    /**
+     * accessToken 받아올 DTO
+     * */
+
     @JsonProperty("access_token")
     private String accessToken;
     private String scope;

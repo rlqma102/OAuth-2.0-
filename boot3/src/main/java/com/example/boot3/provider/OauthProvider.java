@@ -5,7 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 
-// spring security의 ClientRegistration 역할
+/**
+ spring security의 ClientRegistration 역할
+ 내 App의 정보를 나타내는 클래스
+ **/
+
 @Getter
 public class OauthProvider {
 

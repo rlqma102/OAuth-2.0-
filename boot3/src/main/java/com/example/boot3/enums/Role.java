@@ -1,6 +1,5 @@
 package com.example.boot3.enums;
 
-
 public enum Role {
 
     GUEST("ROLE_GUEST"),
